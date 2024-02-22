@@ -1,5 +1,8 @@
 class Course < ApplicationRecord
   extend FriendlyId
+  include PgSearch::Model
+
+  pg_search_scope :global_search, against: %i[title], using: { tsearch: { prefix: true } }
 
   friendly_id :title, use: %i[scoped slugged history finders], scope: :path
 

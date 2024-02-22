@@ -1,0 +1,50 @@
+<%= title("#{params[:query] ? "Search Results for #{params[:query]}"  : 'Search Results'}") %>
+
+<div id="search-results">
+  <section class='page-container'>
+    <div class='text-center'>
+      <h1 class='page-heading-title'>Search Results For <%= params[:query] %></h1>
+    </div>
+
+    <div class="col-span-3 lg:col-span-2 mt-3 mb-10">
+      <%= render CardComponent.new(classes: 'h-full') do |card| %>
+        <% card.with_body(classes: 'prose prose-gray max-w-none dark:prose-invert text-gray-500 dark:text-gray-300') do %>
+          <h1>Course (<%= @course_results.count %>)</h1>
+          <% @course_results.each do |course| %>
+            <div class="flex items-center flex-col md:flex-row gap-6 py-8 text-center border-b dark:border-gray-600 md:flex-row md:text-left">
+              <div>
+                <%= render Course::BadgeComponent.new(course:, options: { size: :small, show_badge: false }) %>
+              </div>
+
+              <div>
+                <%= link_to path_course_url(course.path, course), class:'no-underline' do %>
+                  <h3 class="text-gray-700 font-medium text-lg dark:text-gray-300"><%= highlight course.title, params[:query] %></h3>
+                <% end %>
+                <p class="text-sm text-gray-500 dark:text-gray-400"><%= course.lessons.size %> lessons</p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="col-span-3 lg:col-span-2 mt-3">
+      <%= render CardComponent.new(classes: 'h-full') do |card| %>
+        <% card.with_body(classes: 'prose prose-gray max-w-none dark:prose-invert text-gray-500 dark:text-gray-300') do %>
+          <h1>Lesson (<%= @lesson_results.count %>)</h1>
+          <% @lesson_results.each do |lesson| %>
+              <%= link_to lesson_path(lesson), class:'no-underline ' do %>
+                <div class="flex items-center gap-3 border-b dark:border-gray-600 md:flex-row md:text-left ">
+                  <%= inline_svg 'icons/book.svg', alt: 'lesson icon', class: 'w-6 dark:text-gray-500 text-gray-400 shrink-0', title: 'Lesson' %>
+                    <p class="text-gray-600 dark:text-gray-300">
+                      <%= highlight lesson.display_title, params[:query] %>
+                    </p>
+                </div>
+              <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+</div>
+
