@@ -1,8 +1,6 @@
 class SearchController < ApplicationController
   before_action :check_params
 
-  CONTROLLERS = ['Course', 'Lesson', 'Content']
-
   def results
     @query = params[:query]
     @course_results = global_search_query('Course')
